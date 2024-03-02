@@ -9,17 +9,23 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anta&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&family=Cinzel:wght@400..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">    <style>
         body {
             background-color: #121717;
             font-family: "Poppins", sans-serif;
             font-weight: 600;
             font-style: normal;
             overflow: scroll;
-            /* scroll-behavior:smooth; */
+            scroll-behavior:smooth;
+            overflow-anchor: auto;
         } 
+
+        /*change the color of the cursor selected text*/
+        ::selection {
+            color: #121717;
+            background: #2EDBA6;
+        }
         body::-webkit-scrollbar {
             display: none;
         } 
@@ -28,9 +34,9 @@
             height: 40px;
             border-bottom: 1px solid white;
             /* margin-top: -5px; */
-            padding: 0px 20px 30px 20px;
+            padding: 0px 30px 30px 20px;
             position: fixed;
-            width: 100%;
+            width: 95.7%;
             top: 0px;
             font-family: "Anta", sans-serif;
             font-weight: 800;
@@ -42,7 +48,15 @@
             z-index: 5;
         }
         .header-container {
-            display: inline-block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .welcome-message {
+            font-family: "Cinzel", serif;
+            font-optical-sizing: auto;
+            font-weight: 900;
+            font-style: normal;
         }
 
         .chat-display {
@@ -55,8 +69,7 @@
             padding-top: 70px;
             text-align: justify;
             size: fixed;
-            scroll-padding-block-end: 100px;
-
+            overflow-anchor: auto;
         }
         .User {
             width: 900px;
@@ -119,13 +132,14 @@
         }
         #submit-button {
             height: 50px;
-            width: 90px;
+            width: 100px;
             background-color: #2EDBA6;
             margin: 0px;
             border: 0px;
             border-radius: 16px;
             color: #121717;
             font-weight: bold;
+            font-size: 15px;
         }
 
         .chat-bot-header {
@@ -138,11 +152,13 @@
     <header>
         <div class="header-container">
             <h1>AthenaAI</h1>
-            <span onclick="window.print()" style="margin-left: 1430px; margin-top: -200px; cursor: pointer;" class="material-symbols-outlined print">print</span>
+            <p style="font-size: 18px;">{% now "jS F Y D P" %}</p>
+            <span style="cursor: pointer;" class="material-symbols-outlined print">print</span>
         </div>
     </header>
 
     <div class="chat-display">
+        <h1 style="color: #2EDBA6; font-size: 70px;" class="welcome-message">Welcome to Athena AI</h1>
         {% for chat in chats %}
             <div class="User">
                 <h4 style="padding: 0px; margin-top: 10px;">You</h4>
@@ -152,40 +168,21 @@
             <div class="bot">
                 <div class="chat-bot-header">
                     <h4 style="padding: 0px; margin-top: 10px;">AI</h4>
-                    <span onclick="copyContent()" class="material-symbols-outlined copy1" style="margin-top: 12px; cursor: pointer;">content_copy</span>
+                    <span class="material-symbols-outlined" style="margin-top: 12px; cursor: pointer; margin-right: -820px;">mic</span>
+                    <span class="material-symbols-outlined copy1" style="margin-top: 12px; cursor: pointer;">content_copy</span>
                 </div>
-                <p id="bot-response1" onclick="copyDivToClipboard(this.id);" style="padding: 0px; margin-top: -10px; font-weight: normal;">{{chat.bot_response}}</p>
+                <p id="bot-response1" style="padding: 0px; margin-top: -10px; font-weight: normal;">{{chat.bot_response}}</p>
             </div>
         {% endfor %}
     </div>
     <br><br><br><br>
 
     <div class="prompt-box">
-        <form class="prompt-submit">
-            <input size="5" type="text" name="prompt" id="prompt" placeholder="Ask me anything" autocomplete="off">
-            <input type="submit" name="submit-button" id="submit-button">
+        <form class="prompt-submit" action="{% url 'sendChat' %}" method="post">
+            {% csrf_token %}
+            <input size="5" type="text" name="prompt_user" id="prompt" placeholder="Ask me anything" autocomplete="off">
+            <input type="submit" name="submit-button" id="submit-button" style="cursor: pointer;">
         </form>
     </div>
-
-
-
-    <script>
-
-
-
-
-
-        function copyDivToClipboard(id) {
-            var range = document.createRange();
-            range.selectNode(document.getElementById(id));
-            window.getSelection().removeAllRanges(); // clear current selection
-            window.getSelection().addRange(range); // to select text
-            document.execCommand("copy");
-            window.getSelection().removeAllRanges();// to deselect
-            
-            document.querySelector(".copy1").innerHTML = "<span class='material-symbols-outlined'>check_circle</span>";
-        }
-
-    </script>
 </body>
 </html>
