@@ -15,6 +15,8 @@ import pyttsx3
 # import pyperclip
 import os
 
+from dotenv import load_dotenv
+
 
 # Create your views here.
 def sendChat(request):
@@ -30,7 +32,8 @@ def sendChat(request):
 # function for response generation
 def generate_gemini_response(user_input):
 
-    chatbot = Chatbot(api_key = 'AIzaSyBS4fBmpCv7UYTD9bksmTPpmlxoN8y7xkQ')
+    load_dotenv()
+    chatbot = Chatbot(api_key = os.getenv('API_KEY'))
     chatbot.start_conversation()
 
     state = True
