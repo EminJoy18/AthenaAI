@@ -32,8 +32,7 @@ def sendChat(request):
 # function for response generation
 def generate_gemini_response(user_input):
 
-    load_dotenv()
-    chatbot = Chatbot(api_key = os.getenv('API_KEY'))
+    chatbot = Chatbot(api_key = 'AIzaSyBS4fBmpCv7UYTD9bksmTPpmlxoN8y7xkQ')
     chatbot.start_conversation()
 
     state = True
