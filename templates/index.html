@@ -144,7 +144,8 @@
 
         .chat-bot-header {
             display: flex;
-            justify-content: space-between;
+            /* justify-content: space-between; */
+            gap: 10px;
         }
     </style>
 </head>
@@ -168,8 +169,8 @@
             <div class="bot">
                 <div class="chat-bot-header">
                     <h4 style="padding: 0px; margin-top: 10px;">AI</h4>
-                    <span class="material-symbols-outlined" style="margin-top: 12px; cursor: pointer; margin-right: -820px;">mic</span>
-                    <span class="material-symbols-outlined copy1" style="margin-top: 12px; cursor: pointer;">content_copy</span>
+                    <a href="{% url 'read_aloud' chat.pk %}"><span class="material-symbols-outlined mic" style="margin-top: 12px; cursor: pointer; margin-left: 810px; text-decoration: none;">mic</span></a>
+                    <span class="material-symbols-outlined" style="margin-top: 12px; cursor: pointer">content_copy</span>
                 </div>
                 <p id="bot-response1" style="padding: 0px; margin-top: -10px; font-weight: normal;">{{chat.bot_response}}</p>
             </div>

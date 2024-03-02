@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from chats.models import Chat
 from django.http import HttpResponse
 
@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from chats.Chatbot import Chatbot
 
 import re
+
+#for text to speech
+import pyttsx3
 
 
 # Create your views here.
@@ -45,3 +48,15 @@ def identify_formatting(response):
     # Identify line breaks and replace with <br> tags
     response = response.replace('\n', '<br>')
     return response
+
+
+# for text to speech
+def read_aloud(request, pk):
+    chat = get_object_or_404(Chat, pk = pk)
+    text_to_speech(chat.bot_response)
+    return redirect('home')
+
+def text_to_speech(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
