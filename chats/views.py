@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from chats.models import Chat
 from django.http import HttpResponse
+from django.urls import reverse
 
 # imports for chatbot
 from chats.Chatbot import Chatbot
@@ -9,6 +10,10 @@ import re
 
 #for text to speech
 import pyttsx3
+
+#for text to be copied to clipboard
+# import pyperclip
+import os
 
 
 # Create your views here.
@@ -54,9 +59,19 @@ def identify_formatting(response):
 def read_aloud(request, pk):
     chat = get_object_or_404(Chat, pk = pk)
     text_to_speech(chat.bot_response)
-    return redirect('home')
+    return redirect('home#bot-response')
 
 def text_to_speech(text):
     engine = pyttsx3.init()
     engine.say(text)
     engine.runAndWait()
+
+
+# for text to be copied to clipboard
+def copy_to_clipboard(request, pk):
+    chat = get_object_or_404(Chat, pk = pk)
+    
+    # two methods to copy to clipboard
+    # pyperclip.copy(chat.bot_response)  # external library
+    os.system("echo " + chat.bot_response.strip() + "| clip")  # using os
+    return redirect('home')

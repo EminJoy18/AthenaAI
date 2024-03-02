@@ -170,9 +170,9 @@
                 <div class="chat-bot-header">
                     <h4 style="padding: 0px; margin-top: 10px;">AI</h4>
                     <a href="{% url 'read_aloud' chat.pk %}"><span class="material-symbols-outlined mic" style="margin-top: 12px; cursor: pointer; margin-left: 810px; text-decoration: none;">mic</span></a>
-                    <span class="material-symbols-outlined" style="margin-top: 12px; cursor: pointer">content_copy</span>
+                    <a href="{% url 'copy_to_clipboard' chat.pk %}"><span class="material-symbols-outlined" style="margin-top: 12px; cursor: pointer">content_copy</span></a>
                 </div>
-                <p id="bot-response1" style="padding: 0px; margin-top: -10px; font-weight: normal;">{{chat.bot_response}}</p>
+                <p id="bot-response" style="padding: 0px; margin-top: -10px; font-weight: normal;">{{chat.bot_response}}</p>
             </div>
         {% endfor %}
     </div>
@@ -185,5 +185,6 @@
             <input type="submit" name="submit-button" id="submit-button" style="cursor: pointer;">
         </form>
     </div>
+
 </body>
 </html>
