@@ -59,7 +59,7 @@ def identify_formatting(response):
 def read_aloud(request, pk):
     chat = get_object_or_404(Chat, pk = pk)
     text_to_speech(chat.bot_response)
-    return redirect('home#bot-response')
+    return redirect('home')
 
 def text_to_speech(text):
     engine = pyttsx3.init()
